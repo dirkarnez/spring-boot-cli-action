@@ -40,10 +40,10 @@ jobs:
         curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-cli/3.5.7/spring-boot-cli-3.5.7-bin.zip -L -J --output spring-boot-cli.zip && \
         unzip spring-boot-cli.zip
 
-    - working-directory: spring-3.5.7
+    - working-directory: 'spring-3.5.7/bin'
       shell: bash
       run: |
-        spring --version
+        ./spring --version
       
   # - name: Build with Gradle
   #   if: ${{ startsWith(matrix.template, 'java') }}
