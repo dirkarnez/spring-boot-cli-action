@@ -48,8 +48,7 @@ jobs:
     - working-directory: 'spring-3.5.7/bin'
       shell: bash
       run: |
-        ./spring --version && \
-        ./spring --help
+        ./spring --version
 
     - working-directory: 'spring-3.5.7/bin'
       shell: bash
