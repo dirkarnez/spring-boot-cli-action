@@ -23,7 +23,7 @@ jobs:
       working-directory: project
     strategy:
       matrix:
-        java-version: [ 17, 21, 22] # [8, 11, 16, 17, 21, 22]
+        java-version: [ 17, 21, 22, 25 ] # [8, 11, 16, 17, 21, 22]
         template:
           - web,data-jpa
         include:
@@ -58,7 +58,7 @@ jobs:
     - working-directory: 'spring-3.5.7/bin'
       shell: bash
       run: |
-        ./spring init --name=${{ env.app-name }} --dependencies=${{ matrix.template }} --format=project --build=gradle --type=gradle-project-kotlin ${{ env.working-directory }}
+        ./spring init --name=${{ env.app-name }} --java-version=${{ matrix.java-version }} --dependencies=${{ matrix.template }} --format=project --build=gradle --type=gradle-project-kotlin ${{ env.working-directory }}
         
     - uses: actions/upload-artifact@v4.6.0
       with:
