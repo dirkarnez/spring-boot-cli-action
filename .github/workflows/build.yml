@@ -1,0 +1,65 @@
+name: spring-boot-cli-prebuilt-release-actions-workflow
+on:
+  push:
+    paths-ignore: "**/README.md"
+    # # Sequence of patterns matched against refs/tags
+    # tags:
+    #   - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    #   - 'c*'
+
+permissions:
+    contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
+jobs:
+  build:
+    name: Create Release
+    runs-on: windows-latest
+    env:
+      app-name: my-app
+      working-directory: project
+    strategy:
+      matrix:
+        java-version: [8, 11, 16, 17, 21, 22]
+    steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v5.0.0
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+
+    - shell: bash
+      run: |
+        java -version
+        
+    - shell: bash
+      run: |
+        curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-cli/3.5.7/spring-boot-cli-3.5.7-bin.zip -L -J --output spring-boot-cli.zip && \
+        unzip spring-boot-cli.zip
+
+    - working-directory: spring-3.5.7
+      shell: bash
+      run: |
+        spring --version
+      
+  # - name: Build with Gradle
+  #   if: ${{ startsWith(matrix.template, 'java') }}
+  #   run: |
+  #     mkdir ${{ env.working-directory }} && \
+  #     cd ${{ env.working-directory }} && \
+  #     gradle init \
+  #     --type ${{ matrix.template }} \
+  #     --dsl kotlin \
+  #     --test-framework junit-jupiter \
+  #     --package my.project \
+  #     --project-name ${{ env.app-name }}  \
+  #     --no-split-project  \
+  #     --java-version ${{ matrix.java-version }}
+
+  # - uses: actions/upload-artifact@v4.6.0
+  #   with:
+  #     name: "my-${{ matrix.template }}-app-jdk-${{ matrix.java-version }}"
+  #     path: "${{ env.working-directory }}"
