@@ -4,3 +4,6 @@ spring-boot-cli-action
 
 ### CLI
 - [Using the CLI :: Spring Boot](https://docs.spring.io/spring-boot/cli/using-the-cli.html)
+
+### GUI
+- [Spring Initializr](https://start.spring.io/)
