@@ -26,6 +26,9 @@ jobs:
         java-version: [ 17, 21, 22] # [8, 11, 16, 17, 21, 22]
         template:
           - web,data-jpa
+        include:
+          - name: web-data-jpa
+            template: web,data-jpa
     steps:
     - name: Set up JDK
       uses: actions/setup-java@v5.0.0
@@ -45,7 +48,8 @@ jobs:
     - working-directory: 'spring-3.5.7/bin'
       shell: bash
       run: |
-        ./spring --version
+        ./spring --version && \
+        ./spring --help
 
     - working-directory: 'spring-3.5.7/bin'
       shell: bash
@@ -55,9 +59,9 @@ jobs:
     - working-directory: 'spring-3.5.7/bin'
       shell: bash
       run: |
-        ./spring init --name=${{ env.app-name }} --dependencies=${{ matrix.template }} --format=project --build=gradle ${{ env.working-directory }}
+        ./spring init --name=${{ env.app-name }} --dependencies=${{ matrix.template }} --format=project --build=gradle --type=gradle-project-kotlin ${{ env.working-directory }}
         
     - uses: actions/upload-artifact@v4.6.0
       with:
         name: "my-${{ matrix.template }}-app-jdk-${{ matrix.java-version }}"
-        path: "${{ env.working-directory }}"
+        path: "spring-3.5.7/bin/${{ env.working-directory }}"
